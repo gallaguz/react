@@ -1,0 +1,10 @@
+src
+    components
+        message-list
+            message
+    hooks
+    hocs
+    utils
+    pages
+    store
+    index

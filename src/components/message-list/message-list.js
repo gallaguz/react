@@ -1,20 +1,43 @@
-import {Message} from "@components/message-list/message";
+import { Input, withStyles, InputAdornment } from "@material-ui/core"
+import { Send } from "@material-ui/icons"
 import React, { Component } from "react"
+
+import { Message } from "./message"
+import styles from "./message-list.module.css"
+
+const StyledInput = withStyles(() => {
+  return {
+    root: {
+      "&": {
+        color: "#9a9fa1",
+        padding: "10px 15px",
+        fontSize: "15px",
+      },
+    },
+  }
+})(Input)
 
 export class MessageList extends Component {
   state = {
-    messages: [{ author: "User", value: "Тест сообщение" }],
-    value: ''
+    messages: [{ author: "FirstMessage", value: "Напишите первое сообщение" }],
+    value: "",
   }
 
-  sendMessage = ({ author, value}) => {
+  sendMessage = ({ author, value }) => {
     const { messages } = this.state
 
     if (value !== '') {
-      this.setState({
-        messages: [...messages, { author, value }],
-        value: ''
-      })
+      if (messages[0].author === 'FirstMessage') {
+        this.setState({
+          messages: [{ author, value }],
+          value: "",
+        })
+      } else {
+        this.setState({
+          messages: [...messages, { author, value }],
+          value: "",
+        })
+      }
     }
   }
 
@@ -36,10 +59,9 @@ export class MessageList extends Component {
 
     const lastMessage = messages[messages.length - 1]
 
-
     if (lastMessage.author === "User" && prevState.messages !== messages) {
       setTimeout(() => {
-        this.sendMessage({ author: "bot", value: "Как дела ?" })
+        this.sendMessage({ author: "bot", value: "Как дела?" })
       }, 500)
     }
   }
@@ -47,26 +69,40 @@ export class MessageList extends Component {
   render() {
     const { messages, value } = this.state
 
+    let messageList = <div>{messages[0].value}</div>
+
+    if (messages[0].author !== 'FirstMessage') {
+      messageList =
+          <div>
+            {messages.map((message, index) => (
+                <Message message={message} key={index} />
+            ))}
+          </div>
+    }
+
     return (
-        <div>
-          {messages.map((message, index) => (
-              <Message message={message} key={index} />
-          ))}
-          <input
-              type="text"
-              value={value}
-              onChange={this.handleChangeInput}
-              onKeyPress={this.handlePressInput}
-              placeholder="Введите сообщение..."
-          />
-          <button
-              onClick={() => {
-                this.sendMessage({ author: "User", value })
-              }}
-          >
-            Send
-          </button>
-        </div>
+      <>
+        {messageList}
+        <StyledInput
+          fullWidth={true}
+          value={value}
+          onChange={this.handleChangeInput}
+          onKeyPress={this.handlePressInput}
+          placeholder="Введите сообщение..."
+          endAdornment={
+            <InputAdornment position="end">
+              {value && (
+                <Send
+                  className={styles.icon}
+                  onClick={() => {
+                    this.sendMessage({ author: "User", value })
+                  }}
+                />
+              )}
+            </InputAdornment>
+          }
+        />
+      </>
     )
   }
 }

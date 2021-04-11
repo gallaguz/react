@@ -1,18 +1,23 @@
-import { MessageList } from "@components/message-list"
-import React, { Component } from "react"
+import { ThemeProvider, createMuiTheme } from "@material-ui/core"
+import React from "react"
 import ReactDOM from "react-dom"
+import { MessageList, Layout, ChatList, Header } from "./components"
 
 import "./index.css"
 
-class App extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Сообщения</h1>
-                <MessageList />
-            </div>
-        )
-    }
+const dark = {
+  color: "red",
 }
 
-ReactDOM.render(<App />, document.getElementById("root"))
+const theme = createMuiTheme(dark)
+
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <Layout
+      header={<Header />}
+      chats={<ChatList />}
+      messages={<MessageList />}
+    />
+  </ThemeProvider>,
+  document.getElementById("root"),
+)
