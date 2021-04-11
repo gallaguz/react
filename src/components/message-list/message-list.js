@@ -1,35 +1,21 @@
-import { Input, withStyles, InputAdornment } from "@material-ui/core"
-import { Send } from "@material-ui/icons"
+import {Message} from "@components/message-list/message";
 import React, { Component } from "react"
-
-import { Message } from "@components/message-list/message"
-import styles from "./message-list.module.css"
-
-const StyledInput = withStyles(() => {
-  return {
-    root: {
-      "&": {
-        color: "#9a9fa1",
-        padding: "10px 15px",
-        fontSize: "15px",
-      },
-    },
-  }
-})(Input)
 
 export class MessageList extends Component {
   state = {
     messages: [{ author: "User", value: "Тест сообщение" }],
-    value: ""
+    value: ''
   }
 
-  sendMessage = ({ author, value }) => {
+  sendMessage = ({ author, value}) => {
     const { messages } = this.state
 
-    this.setState({
-      messages: [...messages, { author, value }],
-      value: "",
-    })
+    if (value !== '') {
+      this.setState({
+        messages: [...messages, { author, value }],
+        value: ''
+      })
+    }
   }
 
   handleChangeInput = ({ target }) => {
@@ -44,12 +30,14 @@ export class MessageList extends Component {
     }
   }
 
-  componentDidUpdate(_, state) {
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const { messages } = this.state
 
     const lastMessage = messages[messages.length - 1]
 
-    if (lastMessage.author === "User" && state.messages !== messages) {
+
+    if (lastMessage.author === "User" && prevState.messages !== messages) {
       setTimeout(() => {
         this.sendMessage({ author: "bot", value: "Как дела ?" })
       }, 500)
@@ -64,25 +52,20 @@ export class MessageList extends Component {
           {messages.map((message, index) => (
               <Message message={message} key={index} />
           ))}
-          <StyledInput
-              fullWidth={true}
+          <input
+              type="text"
               value={value}
               onChange={this.handleChangeInput}
               onKeyPress={this.handlePressInput}
               placeholder="Введите сообщение..."
-              endAdornment={
-                <InputAdornment position="end">
-                  {value && (
-                      <Send
-                          className={styles.icon}
-                          onClick={() => {
-                            this.sendMessage({ author: "User", value })
-                          }}
-                      />
-                  )}
-                </InputAdornment>
-              }
           />
+          <button
+              onClick={() => {
+                this.sendMessage({ author: "User", value })
+              }}
+          >
+            Send
+          </button>
         </div>
     )
   }

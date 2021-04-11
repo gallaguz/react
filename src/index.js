@@ -1,6 +1,6 @@
-import React, {Component} from "react"
-import ReactDOM from "react-dom"
 import { MessageList } from "@components/message-list"
+import React, { Component } from "react"
+import ReactDOM from "react-dom"
 
 import "./index.css"
 

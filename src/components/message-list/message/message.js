@@ -15,10 +15,10 @@ export class Message extends Component {
     } = this.props
 
     return (
-      <div>
-        <h3>{value}</h3>
-        <p>{author}</p>
-      </div>
+        <div>
+          <h3>{value}</h3>
+          <p>{author}</p>
+        </div>
     )
   }
 }
