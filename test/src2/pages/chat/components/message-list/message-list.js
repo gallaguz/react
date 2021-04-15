@@ -19,7 +19,7 @@ const StyledInput = withStyles(() => {
 
 export class MessageList extends Component {
   state = {
-    messages: [{ author: "User", value: "Тест сообщение" }],
+    messages: [{ author: "FirstMessage", value: "Напишите первое сообщение" }],
     value: "",
   }
 
@@ -28,17 +28,33 @@ export class MessageList extends Component {
   sendMessage = ({ author, value }) => {
     const { messages } = this.state
 
+    if (value !== '') {
+      if (messages[0].author === 'FirstMessage') {
+        this.setState({
+          messages: [{ author, value }],
+          value: "",
+        })
+      } else {
+        this.setState({
+          messages: [...messages, { author, value }],
+          value: "",
+        })
+      }
+    }
+  }
+
+  handleChangeInput = ({ target }) => {
     this.setState({
-      messages: [...messages, { author, value }],
-      value: "",
+      value: target.value,
     })
   }
 
-  // handleChangeInput = ({ target }) => {
-  //   this.setState({
-  //     value: target.value,
-  //   })
-  // }
+  // fix scroll
+  handleScrollBottom = () => {
+    if (this.ref.current) {
+      this.ref.current.scrollTo(0, this.ref.current.scrollHeight)
+    }
+  }
 
   handlePressInput = ({ code }) => {
     if (code === "Enter") {
@@ -46,20 +62,15 @@ export class MessageList extends Component {
     }
   }
 
-  handleScrollBottom = () => {
-    if (this.ref.current) {
-      this.ref.current.scrollTo(0, this.ref.current.scrollHeight)
-    }
-  }
-
-  componentDidUpdate(_, state) {
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const { messages } = this.state
 
     const lastMessage = messages[messages.length - 1]
 
-    if (lastMessage.author === "User" && state.messages !== messages) {
+    if (lastMessage.author === "User" && prevState.messages !== messages) {
       setTimeout(() => {
-        this.sendMessage({ author: "bot", value: "Как дела ?" })
+        this.sendMessage({ author: "bot", value: "Как дела?" })
       }, 500)
     }
 
@@ -67,21 +78,26 @@ export class MessageList extends Component {
   }
 
   render() {
-    const { messages } = this.state
-    const { value } = this.props
+    const { messages, value } = this.state
+
+    let messageList = <div>{messages[0].value}</div>
+
+    if (messages[0].author !== 'FirstMessage') {
+      messageList =
+          <div ref={this.ref}>
+            {messages.map((message, index) => (
+                <Message message={message} key={index} />
+            ))}
+          </div>
+    }
 
     return (
       <>
-        <div ref={this.ref}>
-          {messages.map((message, index) => (
-            <Message message={message} key={index} />
-          ))}
-        </div>
-
+        {messageList}
         <StyledInput
           fullWidth={true}
           value={value}
-          // onChange={e => this.props.handleChangeValue(e.target.value)}
+          onChange={this.handleChangeInput}
           onKeyPress={this.handlePressInput}
           placeholder="Введите сообщение..."
           endAdornment={

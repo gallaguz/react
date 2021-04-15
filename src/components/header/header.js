@@ -1,6 +1,8 @@
-import React from "react"
+import React, { Component } from "react"
 import styles from "./header.module.css"
 
-export const Header = () => {
-  return <div className={styles.header}>header</div>
+export class Header extends Component {
+  render() {
+    return <div className={styles.header}>header</div>
+  }
 }
