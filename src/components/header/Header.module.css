@@ -1,0 +1,7 @@
+.Header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    height: 50px;
+    width: 100vw;
+}

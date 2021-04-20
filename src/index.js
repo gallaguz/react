@@ -1,24 +1,18 @@
-import { ChatPage } from "@app/pages"
-import { ThemeProvider, createMuiTheme } from "@material-ui/core"
-import React from "react"
-import ReactDOM from "react-dom"
-import { BrowserRouter, Switch, Route } from "react-router-dom"
-import "./index.css"
-
-const dark = {
-  color: "red",
-}
-
-const theme = createMuiTheme(dark)
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import {BrowserRouter} from 'react-router-dom';
+import {App} from './App';
+import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <Switch>
-        <Route path="/chat" component={(params) => <ChatPage {...params} />} />
-        <Route path="*" component={() => <h1>404</h1>} />
-      </Switch>
-    </ThemeProvider>
-  </BrowserRouter>,
-  document.getElementById("root"),
-)
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+    document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals(console.log);
