@@ -1,7 +1,8 @@
 import {Input, withStyles, InputAdornment} from '@material-ui/core';
 import {Send} from '@material-ui/icons';
-import React, {Component, createRef} from 'react';
-
+import React, {createRef, useEffect} from 'react';
+import {connect} from 'react-redux';
+import {sendMessage} from '../../../../store/messages';
 import {Message} from './message';
 import styles from './message-list.module.css';
 
@@ -17,76 +18,80 @@ const StyledInput = withStyles(() => {
   };
 })(Input);
 
-export class MessageList extends Component {
-  ref = createRef();
 
+export const MessageListView = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const {handleChangeValue, sendMessage, messages, value} = props;
 
-  handlePressInput = ({code}) => {
+  const ref = createRef();
+
+  useEffect(() => {
+    handleScrollBottom();
+  });
+
+  const handlePressInput = ({code}) => {
     if (code === 'Enter') {
-      this.handleSendMessage();
-      // this.handleSendMessage({author: 'User', value: this.state.value});
+      handleSendMessage(sendMessage, value);
     }
   };
 
-  handleSendMessage = () => {
-    // eslint-disable-next-line react/prop-types
-    const {sendMessage, value} = this.props;
-
+  const handleSendMessage = (sendMessage, value) => {
     sendMessage({author: 'User', message: value});
   };
 
-  handleScrollBottom = () => {
-    if (this.ref.current) {
-      this.ref.current.scrollTo(0, this.ref.current.scrollHeight);
+  // eslint-disable-next-line no-unused-vars
+  const handleScrollBottom = () => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight);
     }
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // const {messages} = this.state;
-    //
-    // const lastMessage = messages[messages.length - 1];
-    //
-    // if (lastMessage.author === 'User' && prevState.messages !== messages) {
-    //   setTimeout(() => {
-    //     this.sendMessage({author: 'bot', value: 'Как дела ?'});
-    //   }, 500);
-    // }
+  return (
+    <>
+      <div ref={ref}>
+        {/* eslint-disable-next-line react/prop-types */}
+        {messages.map((message, index) => (
+          <Message message={message} key={index} />
+        ))}
+      </div>
 
-    this.handleScrollBottom();
-  }
+      <StyledInput
+        fullWidth={true}
+        value={value}
+        /* eslint-disable-next-line react/prop-types */
+        onChange={(e) => handleChangeValue(e.target.value)}
+        onKeyPress={handlePressInput}
+        placeholder="Введите сообщение..."
+        endAdornment={
+          <InputAdornment position="end">
+            {value && (
+              <Send
+                className={styles.icon}
+                onClick={handleSendMessage}
+              />
+            )}
+          </InputAdornment>
+        }
+      />
+    </>
+  );
+};
 
-  render() {
-    // eslint-disable-next-line react/prop-types
-    const {messages, value} = this.props;
+const mapStateToProps = (state, props) => {
+  const {id} = props.match.params;
 
-    return (
-      <>
-        <div ref={this.ref}>
-          {/* eslint-disable-next-line react/prop-types */}
-          {messages.map((message, index) => (
-            <Message message={message} key={index} />
-          ))}
-        </div>
+  return {
+    messages: state.messagesReducer[id] || [],
+    // @TODO проверить селектор value
+  };
+};
 
-        <StyledInput
-          fullWidth={true}
-          value={value}
-          /* eslint-disable-next-line react/prop-types */
-          onChange={(e) => this.props.handleChangeValue(e.target.value)}
-          onKeyPress={this.handlePressInput}
-          placeholder="Введите сообщение..."
-          endAdornment={
-            <InputAdornment position="end">
-              {value && (
-                <Send
-                  className={styles.icon}
-                  onClick={this.handleSendMessage}
-                />
-              )}
-            </InputAdornment>
-          }
-        />
-      </>
-    );
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  sendMessage: (params) => dispatch(sendMessage(params)),
+  // @TODO добавить changeValue action
+});
+
+export const MessageList = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(MessageListView);

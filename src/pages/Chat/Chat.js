@@ -33,20 +33,16 @@ export class Chat extends Component {
             return (
               <MessageProvider {...params}>
                 {([state, actions]) => (
-                  <Layout
-                    chats={
-                      <ChatList
-                        {...params}
-                        conversations={state.conversations}
-                      />
-                    }
-                  >
+                  <Layout chats={ <ChatList {...params} /> } >
+
                     <Route path="/chat/:id">
                       <MessageList {...state} {...actions} />
                     </Route>
+
                     <Route exact={true} path="/chat">
                       <h1>Выберите чат</h1>
                     </Route>
+
                   </Layout>
                 )}
               </MessageProvider>
