@@ -1,10 +1,13 @@
 import {combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
-import {conversationReducer} from './conversations';
-import {messageReducer} from './messages';
+import {conversationsReducer} from './conversations';
+import {messagesReducer} from './messages';
 
-const reducers = combineReducers({conversationReducer, messageReducer});
+const reducers = combineReducers({
+  conversationsReducer,
+  messagesReducer,
+});
 
 export const store = createStore(
     reducers,

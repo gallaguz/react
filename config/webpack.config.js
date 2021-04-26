@@ -205,7 +205,7 @@ module.exports = function(webpackEnv) {
         'static/js/[name].[contenthash:8].js' :
         isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
-      futureEmitAssets: true,
+      // futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction ?
         'static/js/[name].[contenthash:8].chunk.js' :
@@ -325,10 +325,6 @@ module.exports = function(webpackEnv) {
           .map((ext) => `.${ext}`)
           .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
-        "@app": path.resolve(__dirname, "src/"),
-        "@redux": path.resolve(__dirname, "src/redux"),
-        "@components": path.resolve(__dirname, "src/components"),
-        "@utils": path.resolve(__dirname, "src/utils"),
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',

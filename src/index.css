@@ -97,10 +97,17 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin: 0;
+}
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
@@ -113,10 +120,10 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+  /*display: block;*/
 }
 body {
-  line-height: 1;
+  /*line-height: 1;*/
 }
 ol,
 ul {
@@ -130,7 +137,6 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
   content: none;
 }
 table {

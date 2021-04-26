@@ -4,11 +4,11 @@ import Styles from './Main.module.css';
 
 export const Main = (props) => {
   return (
-    <div className={Styles.wrapper}>
-      <>{ props.header }</>
-      <>{ props.children }</>
-      <>{ props.footer }</>
-    </div>
+    <>
+      <header className={Styles.header}>{ props.header }</header>
+      <main className={Styles.main}>{ props.children }</main>
+      <footer className={Styles.footer}>{ props.footer }</footer>
+    </>
   );
 };
 
