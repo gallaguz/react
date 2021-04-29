@@ -1,18 +1,43 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3001;
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/api/hello', (req, res) => {
-    res.send({ express: 'Hello From Express...' });
-});
-app.post('/api/world', (req, res) => {
-    console.log(req.body);
-    res.send(
-        `I received your POST request. This is what you sent me: ${req.body.post}`,
-    );
-});
+const conversations = [
+    { title: "room1", value: "" },
+    { title: "room2", value: "" },
+    { title: "room3", value: "" },
+]
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const messages = {
+    room1: [
+        { author: "User", message: "test!", createdTs: new Date() },
+        { author: "Bot", message: "Привет, я бот!", createdTs: new Date() },
+    ],
+    room3: [
+        { author: "User", message: "test!", createdTs: new Date() },
+        { author: "Bot", message: "Привет, я бот!", createdTs: new Date() },
+    ],
+}
+
+const getConversations = (request, response) => {
+    response.status(200).send(conversations);
+}
+
+const getMessagesById = (request, response) => {
+    const { id } = request.params;
+
+    response.status(200).send({ messages: messages[id] || [], roomId: id });
+}
+
+app.get("/conversations", getConversations);
+app.get("/messages/:id", getMessagesById);
+
+app.listen(port, () =>
+  console.log(`Listening on http://localhost:${port}`));
+

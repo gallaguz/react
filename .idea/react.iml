@@ -4,11 +4,19 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/client/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/client/node_modules/redux-thunk" />
     </content>
+    <content url="file://$MODULE_DIR$/client/node_modules/axios" />
+    <content url="file://$MODULE_DIR$/client/node_modules/prop-types" />
+    <content url="file://$MODULE_DIR$/client/node_modules/react" />
+    <content url="file://$MODULE_DIR$/client/node_modules/react-redux" />
+    <content url="file://$MODULE_DIR$/client/node_modules/react-router" />
+    <content url="file://$MODULE_DIR$/client/node_modules/react-router-dom" />
+    <content url="file://$MODULE_DIR$/client/node_modules/redux-thunk" />
     <content url="file://$MODULE_DIR$/node_modules/react-router" />
     <content url="file://$MODULE_DIR$/node_modules/redux-persist" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="@types/react-router-dom" level="application" />
+    <orderEntry type="library" exported="" name="@types/react-router-dom" level="application" />
   </component>
 </module>

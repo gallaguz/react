@@ -4,6 +4,8 @@ import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import thunk from 'redux-thunk';
+import {request} from '../api';
 import {conversationsReducer} from './conversations';
 import {messagesReducer} from './messages';
 import {botSendMessage, logger} from './middlewares';
@@ -25,6 +27,7 @@ export const store = createStore(
         })),
     compose(
         applyMiddleware(
+            thunk.withExtraArgument(request),
             routerMiddleware(history),
             botSendMessage,
             logger,
@@ -34,3 +37,5 @@ export const store = createStore(
 );
 
 export const persistor = persistStore(store);
+
+

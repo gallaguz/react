@@ -1,13 +1,24 @@
 import {List, Button} from '@material-ui/core';
 import {push} from 'connected-react-router';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import {connect} from 'react-redux';
+import {getConversations} from 'store';
 import {AddContactModal} from '../addContactModal';
 import {ChatItem} from './chatItem';
 import Styles from './chatList.module.css';
 
-const ChatListView = ({match, conversations, messages, push}) => {
+const ChatListView = ({
+  match,
+  conversations,
+  messages,
+  push,
+  getConversations,
+  conversationsPending,
+}) => {
   const chatId = match?.params.id || '';
 
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +32,11 @@ const ChatListView = ({match, conversations, messages, push}) => {
     return message[message.length - 1];
   };
 
-  return (
+  useEffect(() => {
+    getConversations();
+  }, [getConversations]);
+
+  return conversationsPending ? (<div>Loading...</div>) : (
     <div className={Styles.chatList}>
       <div>
         <List component="nav">
@@ -58,15 +73,19 @@ ChatListView.propTypes = {
   conversations: PropTypes.array.isRequired,
   messages: PropTypes.object.isRequired,
   push: PropTypes.func.isRequired,
+  getConversations: PropTypes.func,
+  conversationsPending: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  conversations: state.conversationsReducer,
-  messages: state.messagesReducer,
+  conversations: state.conversationsReducer.conversations,
+  conversationsPending: state.conversationsReducer.conversationsPending,
+  messages: state.messagesReducer.messages,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   push: (link) => dispatch(push(link)),
+  getConversations: () => dispatch(getConversations()),
 });
 
 export const ChatList = connect(
