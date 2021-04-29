@@ -1,13 +1,13 @@
 import {List, Button} from '@material-ui/core';
+import {push} from 'connected-react-router';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {AddContactModal} from '../modal';
+import {AddContactModal} from '../addContactModal';
 import {ChatItem} from './chatItem';
 import Styles from './chatList.module.css';
 
-const ChatListView = ({match, conversations, messages}) => {
+const ChatListView = ({match, conversations, messages, push}) => {
   const chatId = match?.params.id || '';
 
   const [isOpen, setIsOpen] = useState(false);
@@ -26,19 +26,23 @@ const ChatListView = ({match, conversations, messages}) => {
       <div>
         <List component="nav">
           {conversations.map((chat) => (
-            <Link key={chat.title} to={`/chat/${chat.title}`}>
-              <ChatItem
-                title={chat.title}
-                selected={chatId === chat.title}
-                lastMessage={lastMessage(chat)}
-              />
-            </Link>
+            <ChatItem
+              key={chat.title}
+              title={chat.title}
+              selected={chatId === chat.title}
+              lastMessage={lastMessage(chat)}
+              handleNavigate={() => push(`/chat/${chat.title}`)}
+            />
           ))}
         </List>
       </div>
 
       <div>
-        <AddContactModal isOpen={isOpen} onClose={toggleModal} />
+        <AddContactModal
+          isOpen={isOpen}
+          onClose={toggleModal}
+          conversations={conversations}
+        />
 
         <Button variant="contained" fullWidth={true} onClick={toggleModal}>
           Добавить чат
@@ -53,6 +57,7 @@ ChatListView.propTypes = {
   match: PropTypes.object.isRequired,
   conversations: PropTypes.array.isRequired,
   messages: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -60,5 +65,12 @@ const mapStateToProps = (state) => ({
   messages: state.messagesReducer,
 });
 
-export const ChatList = connect(mapStateToProps)(ChatListView);
+const mapDispatchToProps = (dispatch) => ({
+  push: (link) => dispatch(push(link)),
+});
+
+export const ChatList = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(ChatListView);
 

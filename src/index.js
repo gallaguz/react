@@ -1,18 +1,21 @@
+import {ConnectedRouter} from 'connected-react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router-dom';
+import {PersistGate} from 'redux-persist/integration/react';
 import {App} from './App';
 // import reportWebVitals from './reportWebVitals';
-import {store} from './store';
+import {store, history, persistor} from './store';
 
 ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>,
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </ConnectedRouter>
+    </Provider>,
     document.getElementById('root')
 );
 

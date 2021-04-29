@@ -1,4 +1,7 @@
-import {ADD_CONVERSATION, CHANGE_VALUE} from './types';
+import {
+  ADD_CONVERSATION,
+  CHANGE_VALUE,
+} from './types';
 
 // contact - string
 export const addConversation = (contact) => {

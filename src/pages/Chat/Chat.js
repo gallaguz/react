@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+// mark folder 'react-router' as 'not excluded'
+// if linting 'cannot resolve symbol'
 import {Switch, Route} from 'react-router-dom';
 import {
   ChatList,

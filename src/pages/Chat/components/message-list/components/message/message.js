@@ -18,7 +18,7 @@ export const Message = (props) => {
       {/* eslint-disable-next-line react/prop-types */}
       <h3>{message}</h3>
       <p>{author}</p>
-      <p>{format(createdTs, 'HH:mm:ss')}</p>
+      <p>{format(new Date(createdTs), 'HH:mm:ss')}</p>
     </div>
   );
 };
