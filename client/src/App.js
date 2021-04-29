@@ -5,6 +5,19 @@ import {Main as MainLayout} from './hoc';
 import {About, Auth, Chat, Home} from './pages';
 
 export const App = () => {
+  // const callApi = async () => {
+  //   const response = await fetch('/api/hello');
+  //   const body = await response.json();
+  //   if (response.status !== 200) throw Error(body.message);
+  //   return body;
+  // };
+  //
+  // callApi()
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => console.log(err));
+
   return (
     <MainLayout
       header={<Header />}
